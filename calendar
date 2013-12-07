@@ -1,0 +1,3 @@
+#!/bin/bash
+
+chromium-browser -app=https://www.google.com/calendar/

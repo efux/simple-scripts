@@ -1,0 +1,3 @@
+#!/bin/bash
+
+chromium-browser -app=https://www.evernote.com/Login.action?targetUrl=%2FHome.action
