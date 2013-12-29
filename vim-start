@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# This scripts starts vim in konsole (a terminal emulator) within a given directory 
+# In Thunar chose "Open with..." and then "A custom command" -> full path to this file necessary
+ARGS="$@"
+PFAD=`dirname $ARGS`
+FILE=`basename $ARGS`
+konsole --workdir $PFAD -e vim $FILE
