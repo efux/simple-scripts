@@ -33,7 +33,10 @@ dat="["
 mounts=`cat /proc/mounts | grep /media | cut -d " " -f2`
 for mnt in $mounts
 do
-	fs=`df $mnt -h | tail -n1 | awk '{print $4}'`
+	match="\\\040";
+	repl=" ";
+	mnt=${mnt/$match/$repl};
+	fs=`df "$mnt" -h | tail -n1 | awk '{print $4}'`
 	mnt=${mnt/\/media\//}
 	dat="$dat {\"color\": \"#484848\",\"full_text\": \"$mnt: ${fs}B\"}, "
 done 
