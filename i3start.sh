@@ -5,4 +5,6 @@ echo "[";
 
 rm /tmp/eti3bar
 
-/home/etienne/scripts/i3ex.sh
+while [ true ] ; do
+	/home/etienne/scripts/i3ex.sh
+done

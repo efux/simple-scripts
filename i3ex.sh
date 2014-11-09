@@ -41,7 +41,3 @@ do
 	dat="$dat {\"color\": \"#484848\",\"full_text\": \"$mnt: ${fs}B\"}, "
 done 
 echo "$str${i3stat/[/$dat}" || exit 1
-	
-
-/home/etienne/scripts/i3ex.sh
-
