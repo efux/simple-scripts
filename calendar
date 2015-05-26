@@ -1,3 +1,4 @@
 #!/bin/bash
 
-chromium-browser -app=https://www.google.com/calendar/
+chromium --new-window https://www.google.com/calendar/
+

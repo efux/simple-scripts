@@ -1,3 +1,3 @@
 #!/bin/bash
 
-chromium-browser --new-window https://music.google.com
+chromium --app=https://music.google.com

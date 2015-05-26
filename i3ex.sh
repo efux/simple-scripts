@@ -19,25 +19,21 @@
 # }
 
 
-i3stat=$(i3status);
-
-if [ -f /tmp/eti3bar ]
-then
-	str=",";
-else
-	str="";
-	echo "1" >> /tmp/eti3bar;
-fi
-
-dat="["
-mounts=`cat /proc/mounts | grep /media | cut -d " " -f2`
-for mnt in $mounts
+i3status | while :
 do
-	match="\\\040";
-	repl=" ";
-	mnt=${mnt/$match/$repl};
-	fs=`df "$mnt" -h | tail -n1 | awk '{print $4}'`
-	mnt=${mnt/\/media\//}
-	dat="$dat {\"color\": \"#484848\",\"full_text\": \"$mnt: ${fs}B\"}, "
-done 
-echo "$str${i3stat/[/$dat}" || exit 1
+    read i3stat
+    dat=""
+    mounts=`cat /proc/mounts | grep /media | cut -d " " -f2`
+    music=`/home/efux/Documents/dev/i3-gmusic/get_song.sh`
+    message=`/home/efux/Documents/dev/i3-message/get_message.sh`
+    for mnt in $mounts
+    do
+        match="\\\040";
+        repl=" ";
+        mnt=${mnt/$match/$repl};
+        fs=`df "$mnt" -h | tail -n1 | awk '{print $4}'`
+        mnt=${mnt/\/media\//}
+        dat="$dat {\"color\": \"#484848\",\"full_text\": \"$mnt: ${fs}B\"}, "
+    done 
+    echo "${i3stat/[/ [$message $music $dat}"
+done
