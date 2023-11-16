@@ -1,0 +1,20 @@
+#!/bin/bash
+
+declare -a options=(
+"vim - ~/.vimrc"
+"zsh - ~/.zshrc"
+"sway/i3- ~/.config/i3/config"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -l 20 -p 'Edit config' -theme dmenu_vertical)
+
+
+if [ "$choice" ]; then
+	cfg=$(printf '%s\n' "${choice}" | awk '{print $NF}')
+	vim-start "$cfg"
+
+else
+	echo "Program terminated." && exit 0
+fi
+
+
