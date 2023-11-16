@@ -1,4 +1,0 @@
-#!/bin/bash
-
-chromium --new-window https://www.google.com/calendar/
-
