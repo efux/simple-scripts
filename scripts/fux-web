@@ -1,0 +1,22 @@
+#!/bin/bash
+
+declare -a options=(
+"GMail - https://mail.google.com"
+"GDrive - https://drive.google.com"
+"Evernote - https://evernote.com"
+"GitHub - https://github.com/efux"
+"YouTube Music - https://music.youtube.com"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -l 20 -p 'Open in Browser' -theme dmenu_vertical)
+
+
+if [ "$choice" ]; then
+	cfg=$(printf '%s\n' "${choice}" | awk '{print $NF}')
+	chromium --app=$cfg
+
+else
+	echo "Program terminated." && exit 0
+fi
+
+
