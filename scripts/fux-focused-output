@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Get the list of outputs from Sway
+output_list=$(swaymsg -t get_outputs)
+
+# Parse the output list to extract the short names
+output_names=$(echo "$output_list" | jq -r '.[] | select(.focused==false) | .name')
+
+# Get the short name of the currently focused output
+focused_output=$(echo "$output_list" | jq -r '.[] | select(.focused==true) | .name')
+
+# Find the first output whose short name doesn't start with "e" and isn't the currently focused output
+for name in $output_names; do
+  if [[ $name != e* && $name != $focused_output_var ]]; then
+    other_output=$name
+    break
+  fi
+done
+
+echo "Focused output: $focused_output"
+echo "Other output: $other_output"
+
+swaymsg output $focused_output pos 0 0
+swaymsg output $other_output pos 1980 0
+swaymsg output eDP-1 pos 3840 0
