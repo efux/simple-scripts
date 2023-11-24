@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+options=()
+while IFS= read -r line; do
+	options+=( "$line" )
+done < <( nmcli --fields BARS,BSSID,IN-USE,SSID dev wifi list | tail -n +2 )
+
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -l 20 -p 'Connect to wifi' -theme dmenu_vertical)
+
+
+if [ "$choice" ]; then
+	cfg=$(printf '%s\n' "${choice}" | awk '{print $2}')
+	nmcli dev wifi connect $cfg
+
+else
+	echo "Program terminated." && exit 0
+fi
+
+
