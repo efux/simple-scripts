@@ -3,6 +3,7 @@
 declare -a options=(
 "GMail - https://mail.google.com"
 "GDrive - https://drive.google.com"
+"Calendar - https://calendar.google.com"
 "Evernote - https://evernote.com"
 "GitHub - https://github.com/efux"
 "YouTube Music - https://music.youtube.com"
