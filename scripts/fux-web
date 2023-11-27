@@ -14,7 +14,7 @@ choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -l 20 -p 'Open in Browse
 
 if [ "$choice" ]; then
 	cfg=$(printf '%s\n' "${choice}" | awk '{print $NF}')
-	chromium --app=$cfg
+	chromium --new-window $cfg
 
 else
 	echo "Program terminated." && exit 0
