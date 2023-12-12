@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Get the list of outputs from Sway
+output_list=$(swaymsg -t get_outputs)
+
+# Get the short name of the currently focused output
+focused_output=$(echo "$output_list" | jq -r '.[] | select(.focused==true) | .name')
+
+swaymsg output $focused_output disable
