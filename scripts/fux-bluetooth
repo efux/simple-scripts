@@ -5,14 +5,18 @@ options=()
 while IFS= read -r line; do
 	options+=( "$line" )
 done < <( bluetoothctl -- devices )
+options+=( "Disconnect" )
 
 choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -i -l 20 -p 'Connect to device' -theme dmenu_vertical)
 
 
 if [ "$choice" ]; then
-	cfg=$(printf '%s\n' "${choice}" | awk '{print $2}')
-	bluetoothctl -- connect $cfg
-
+	if [ "$choice" == "Disconnect" ]; then
+		bluetoothctl -- disconnect
+	else
+		cfg=$(printf '%s\n' "${choice}" | awk '{print $2}')
+		bluetoothctl -- connect $cfg
+	fi
 else
 	echo "Program terminated." && exit 0
 fi
