@@ -1,3 +1,3 @@
 #!/bin/bash
 
-chromium --app=https://music.youtube.com
+chromium --app=https://open.spotify.com
