@@ -1,3 +1,3 @@
 #!/bin/bash
 
-chromium --app=https://open.spotify.com
+firefox --new-window=https://open.spotify.com
