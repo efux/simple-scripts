@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rclone copy /home/efux/Documents/MyDatabase.kdbx gdrive:/Keepass/
