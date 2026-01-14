@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Get all active workspace numbers
+active_workspaces=$(swaymsg -t get_workspaces | jq -r '.[].num')
+
+# Find the next available workspace number
+next_workspace=1
+while [[ $active_workspaces == *"$next_workspace"*  ]]; do
+     next_workspace=$((next_workspace + 1))
+done
+
+# Switch to the next available workspace
+echo $next_workspace

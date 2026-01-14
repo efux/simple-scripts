@@ -1,0 +1,8 @@
+#!/bin/bash
+
+active_workspace=$(swaymsg -t get_outputs -r | jq '.[] | select(.focused) | .current_workspace | tonumber')
+
+read -p "Rename workspace to: " new_name
+
+full_new_workspace_name="${active_workspace} ${new_name}"
+swaymsg rename workspace to "${full_new_workspace_name}"

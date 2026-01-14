@@ -3,5 +3,5 @@
 # Find the next available workspace number
 next_workspace="$(get-next-available-sway-workspace)"
 
-# Switch to the next available workspace
-swaymsg workspace "$next_workspace"
+# Move active window to workspace
+swaymsg move container to workspace "$next_workspace"
