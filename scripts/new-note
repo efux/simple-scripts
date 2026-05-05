@@ -1,0 +1,14 @@
+#!/bin/bash
+
+read -rp "Filename: " name
+
+if [[ -z "$name" ]]; then
+    echo "No filename provided." >&2
+    exit 1
+fi
+
+date_prefix=$(date +%Y%m%d)
+filepath="$HOME/Documents/notes/${date_prefix}_${name}.md"
+
+mkdir -p "$HOME/Documents/notes"
+vim "$filepath"
