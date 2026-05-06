@@ -14,7 +14,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-KANSHI_CONFIG = Path(__file__).resolve().parent.parent.parent / "dotfiles/kanshi/.config/kanshi/config"
+KANSHI_CONFIG = Path("~/Documents/dev/dotfiles/kanshi/.config/kanshi/config")
 
 
 def get_outputs():
