@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""Query sway outputs and append a kanshi profile to the kanshi config.
+
+Usage: save-outputs-to-config [profile-name]
+
+If no profile name is given, one is generated from the current timestamp.
+The profile is appended (with a blank line) to ~/.config/kanshi/config and
+also printed to stdout.
+"""
+
+import json
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+KANSHI_CONFIG = Path(__file__).resolve().parent.parent.parent / "dotfiles/kanshi/.config/kanshi/config"
+
+
+def get_outputs():
+    result = subprocess.run(
+        ["swaymsg", "-t", "get_outputs"],
+        capture_output=True, text=True, check=True,
+    )
+    return json.loads(result.stdout)
+
+
+def identifier(output):
+    """Return the most specific sway/kanshi output identifier available."""
+    make = (output.get("make") or "").strip()
+    model = (output.get("model") or "").strip()
+    serial = (output.get("serial") or "").strip()
+    if make and model and serial:
+        return f"{make} {model} {serial}"
+    if make and model:
+        return f"{make} {model}"
+    return output["name"]
+
+
+def fmt_refresh(mhz):
+    hz = mhz / 1000
+    rounded = round(hz, 3)
+    if rounded == int(rounded):
+        return f"{int(rounded)}"
+    return f"{rounded:.3f}".rstrip("0")
+
+
+def fmt_scale(scale):
+    rounded = round(scale, 4)
+    if rounded == int(rounded):
+        return str(int(rounded))
+    return f"{rounded:.4f}".rstrip("0")
+
+
+def main():
+    profile_name = sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y%m%d_%H%M")
+
+    try:
+        outputs = get_outputs()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        print("error: could not query sway (is sway running?)", file=sys.stderr)
+        sys.exit(1)
+
+    active = [o for o in outputs if o.get("active")]
+    if not active:
+        print("error: no active outputs found", file=sys.stderr)
+        sys.exit(1)
+
+    lines = [f"profile {profile_name} {{"]
+    for o in active:
+        ident = identifier(o)
+        mode = o.get("current_mode") or {}
+        rect = o.get("rect") or {}
+        scale = o.get("scale", 1.0)
+        transform = o.get("transform", "normal")
+
+        w, h, r = mode.get("width"), mode.get("height"), mode.get("refresh")
+        x, y = rect.get("x"), rect.get("y")
+
+        parts = []
+        if w and h and r:
+            parts.append(f"mode {w}x{h}@{fmt_refresh(r)}")
+        if x is not None and y is not None:
+            parts.append(f"position {x},{y}")
+        if scale and round(scale, 4) != 1.0:
+            parts.append(f"scale {fmt_scale(scale)}")
+        if transform and transform != "normal":
+            parts.append(f"transform {transform}")
+
+        options = " ".join(parts)
+        lines.append(f'    output "{ident}" {options}')
+    lines.append("}")
+
+    block = "\n".join(lines)
+    print(block)
+
+    existing = KANSHI_CONFIG.read_text() if KANSHI_CONFIG.exists() else ""
+    separator = "\n" if existing.rstrip("\n") == "" else "\n\n"
+    KANSHI_CONFIG.write_text(existing.rstrip("\n") + separator + block + "\n")
+    print(f"\nAppended to {KANSHI_CONFIG}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
