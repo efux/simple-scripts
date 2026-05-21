@@ -14,7 +14,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-KANSHI_CONFIG = Path("~/Documents/dev/dotfiles/kanshi/.config/kanshi/config")
+KANSHI_CONFIG = Path("/home/efux/Documents/dev/dotfiles/kanshi/.config/kanshi/config")
 
 
 def get_outputs():
@@ -27,15 +27,7 @@ def get_outputs():
 
 def identifier(output):
     """Return the most specific sway/kanshi output identifier available."""
-    make = (output.get("make") or "").strip()
-    model = (output.get("model") or "").strip()
-    serial = (output.get("serial") or "").strip()
-    if make and model and serial:
-        return f"{make} {model} {serial}"
-    if make and model:
-        return f"{make} {model}"
     return output["name"]
-
 
 def fmt_refresh(mhz):
     hz = mhz / 1000
@@ -88,7 +80,7 @@ def main():
             parts.append(f"transform {transform}")
 
         options = " ".join(parts)
-        lines.append(f'    output "{ident}" {options}')
+        lines.append(f'    output {ident} {options}')
     lines.append("}")
 
     block = "\n".join(lines)
